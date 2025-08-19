@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shebokhealthcare/ui/home/side_menu.dart';
+import 'package:shebokhealthcare/ui/thalassemia/thalassemia_screen.dart';
 
 import '../affiliated/HospitalListScreen.dart';
 import '../post/requested_post_details.dart';
 
+import '../request_blood/BloodRequestScreen.dart';
 import '../widgets/BloodChip.dart';
 import '../widgets/RequestCard.dart';
 
+import '../widgets/showReferralCodePopup.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -52,6 +55,12 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               );
                               break;
+
+                            case 'refer':
+                            // Call popup directly instead of Navigator.push
+                              showReferralCodePopup(context, "161016");
+                              break;
+
                           }
                         },
 
@@ -103,12 +112,22 @@ class HomeScreen extends StatelessWidget {
                 crossAxisSpacing: 10,
                 childAspectRatio: 2.3,
                 children: [
-                  _actionButton("Request Blood", Colors.red[900]!, Icons.add),
-                  _actionButton("Become A Donor", Colors.green, Icons.volunteer_activism),
+                  _actionButton("Request Blood", Colors.red[900]!, Icons.add,
+                      onTap: () {
+                        Get.to(() => BloodRequestScreen());
+                      }),
+
+                  _actionButton("Become A Donor", Colors.green, Icons.volunteer_activism , onTap: () {
+        Get.to(() => BloodRequestScreen());
+        }),
                   _actionButton("Online Booking", Colors.yellow.shade700, Icons.book_online),
                   _actionButton("Foreign Treatment", Colors.blue, Icons.public),
                   _actionButton("Find Doctors", Colors.teal, Icons.local_hospital),
-                  _actionButton("Thalassemia Club", Colors.green, Icons.group),
+                  _actionButton("Thalassemia Club", Colors.green, Icons.group,
+                      onTap: () {
+                        Get.to(() => ThalassemiaScreen());
+                      }
+                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -174,9 +193,9 @@ class HomeScreen extends StatelessWidget {
   }
 
   /// 🔹 Helper for Action Buttons
-  Widget _actionButton(String text, Color color, IconData icon) {
+  Widget _actionButton(String text, Color color, IconData icon ,  {VoidCallback? onTap}) {
     return ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: onTap,
       icon: Icon(icon, color: Colors.white),
       label: Text(text, style: TextStyle(color: Colors.white)),
       style: ElevatedButton.styleFrom(
