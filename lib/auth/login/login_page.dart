@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ for responsiveness
 import 'package:shebokhealthcare/auth/profile/profile_create_page.dart';
 import '../signup/SignupPage.dart';
 import 'login_controller.dart';
@@ -12,198 +13,241 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = screenWidth * 0.9; // 10% smaller for responsiveness
+    final cardWidth = screenWidth * 0.9; // keep card slightly smaller
 
-    return Scaffold(
+    return ScreenUtilInit(
+      designSize: const Size(390, 844), // base design size
+      builder: (context, child) => Scaffold(
+        body: Stack(
+          children: [
+            // Solid red background
+            Container(color: const Color(0xFFBD1F1C)),
 
-
-
-      body: Stack(
-        children: [
-
-          const SizedBox(height: 20),
-          // Solid red background
-          Container(
-            color: const Color(0xFFBD1F1C), // match Figma's red
-          ),
-
-          // Bottom-left yellow spot
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Image.asset(
-              'assets/spot.png',
-              width: 200,
-              fit: BoxFit.cover,
+            // Bottom-left spot
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child: Image.asset(
+                'assets/spot.png',
+                width: 200.w * 0.9, // -10%
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
-          // Top-right yellow spot
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/top_spot.png',
-              width: 200,
-              fit: BoxFit.cover,
+            // Top-right spot
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Image.asset(
+                'assets/top_spot.png',
+                width: 200.w * 0.9, // -10%
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
-
-
-          // Page content
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-
-                    Image.asset(
-                      "assets/logo.png",
-                      height: 100,
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // White card container
-                    Container(
-                      width: cardWidth,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
+            // Content
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w * 0.9,
+                    vertical: 16.h * 0.9,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Logo
+                      Image.asset(
+                        "assets/logo.png",
+                        height: 100.h * 0.9, // smaller
                       ),
-                      child: Column(
-                        children: [
-                          // Tabs
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {},
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.red, width: 1),
-                                  backgroundColor: Colors.red[900],
-                                  foregroundColor: Colors.white, // text color
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                ),
-                                child: const Text("Log In"),
-                              ),
-                              const SizedBox(width: 8),
-                              OutlinedButton(
-                                onPressed: () {
-                                  Get.to(SignupPage());
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.red, width: 1),
-                                  foregroundColor: Colors.black, // text color
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                ),
-                                child: const Text("Sign Up"),
-                              ),
-                            ],
-                          ),
+                      SizedBox(height: 20.h * 0.9),
 
-                          const SizedBox(height: 16),
+                      // White Card
+                      Container(
+                        width: cardWidth,
+                        padding: EdgeInsets.all(16.w * 0.9),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Column(
+                          children: [
+                            // Tabs
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                OutlinedButton(
+                                  onPressed: () {},
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                        color: Colors.red, width: 1),
+                                    backgroundColor: Colors.red[900],
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 24.w * 0.9,
+                                      vertical: 12.h * 0.9,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Log In",
+                                    style: TextStyle(fontSize: 14.sp * 0.9),
+                                  ),
+                                ),
+                                SizedBox(width: 8.w * 0.9),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    Get.to(SignupPage());
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                        color: Colors.red, width: 1),
+                                    foregroundColor: Colors.black,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 24.w * 0.9,
+                                      vertical: 12.h * 0.9,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Sign Up",
+                                    style: TextStyle(fontSize: 14.sp * 0.9),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16.h * 0.9),
 
-                          // Email / Phone field
-                          TextField(
-                            onChanged: (value) =>
-                            controller.emailOrPhone.value = value,
-                            decoration: InputDecoration(
-                              labelText: "Enter your email / phone",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Colors.red,
-                                  width:1,
+                            // Phone field
+                            TextField(
+                              controller: controller.phoneController,
+                              decoration: InputDecoration(
+                                labelText: "Enter phone",
+                                labelStyle:
+                                TextStyle(fontSize: 13.sp * 0.9),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[900]!,
+                                    width: 1,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[900]!,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[900]!,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Colors.red,
-                                  width:1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Colors.red,
-                                  width: 2,
-                                ),
-                              ),
+                              style: TextStyle(fontSize: 13.sp * 0.9),
+                              keyboardType: TextInputType.number,
                             ),
-                          ),
-                          const SizedBox(height: 12),
+                            SizedBox(height: 12.h * 0.9),
 
-                          // Password field
-                          Obx(() => TextField(
-                            obscureText: !controller.isPasswordVisible.value,
-                            onChanged: (value) =>
-                            controller.password.value = value,
-                            decoration: InputDecoration(
-                              labelText: "Password",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Colors.red,
-                                  width: 1.5,
+                            // Password field
+                            Obx(() => TextField(
+                              controller: controller.passwordController,
+                              obscureText:
+                              !controller.isPasswordVisible.value,
+                              decoration: InputDecoration(
+                                labelText: "Password",
+                                labelStyle:
+                                TextStyle(fontSize: 13.sp * 0.9),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[900]!,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[900]!,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: Colors.red[900]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    controller.isPasswordVisible.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    size: 18.sp * 0.9,
+                                  ),
+                                  onPressed:
+                                  controller.togglePasswordVisibility,
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Colors.red,
-                                  width: 1.5,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: Colors.red,
-                                  width: 2,
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  controller.isPasswordVisible.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed:
-                                controller.togglePasswordVisibility,
-                              ),
-                            ),
-                          )),
-                          const SizedBox(height: 16),
+                              style: TextStyle(fontSize: 13.sp * 0.9),
+                            )),
+                            SizedBox(height: 16.h * 0.9),
 
-                          // Next button
-                          ElevatedButton(
-                            onPressed: (){
-                              Get.to(ProfileCreatePage());
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red[900],
-                              minimumSize: const Size(double.infinity, 48),
-                            ),
-                            child: const Text(
-                              "Next",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
+                            // Remember Me checkbox
+                            Obx(() => CheckboxListTile(
+                              value: controller.isrememberme.value,
+                              onChanged: controller.toggleRememberMe,
+                              title: Text(
+                                "Remember Me",
+                                style: TextStyle(fontSize: 13.sp * 0.9),
+                              ),
+                              controlAffinity:
+                              ListTileControlAffinity.leading,
+                              activeColor: Colors.red[900],
+                            )),
+                            SizedBox(height: 16.h * 0.9),
+
+                            // Login button
+                            Obx(() => ElevatedButton(
+                              onPressed: controller.isLoading.value
+                                  ? null
+                                  : controller.login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red[900],
+                                minimumSize: Size(
+                                    double.infinity, 48.h * 0.9), // -10%
+                              ),
+                              child: controller.isLoading.value
+                                  ? SizedBox(
+                                height: 20.h * 0.9,
+                                width: 20.h * 0.9,
+                                child:
+                                const CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                                  : Text(
+                                "Login",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14.sp * 0.9,
+                                ),
+                              ),
+                            )),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

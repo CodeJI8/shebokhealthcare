@@ -109,11 +109,12 @@ class SignupPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
 
-                          // Email
+                          // Phone
                           TextField(
                             onChanged: (value) =>
-                            controller.email.value = value,
-                            decoration: _inputDecoration("Enter your email"),
+                            controller.Phone.value = value,
+                            decoration: _inputDecoration("Enter your Phone"),
+                            keyboardType: TextInputType.number,
                           ),
                           const SizedBox(height: 12),
 
@@ -161,7 +162,7 @@ class SignupPage extends StatelessWidget {
                           TextField(
                             onChanged: (value) =>
                             controller.referralCode.value = value,
-                            decoration: _inputDecoration("Referral code"),
+                            decoration: _inputDecoration("Referral code (optional)"),
                           ),
                           const SizedBox(height: 16),
 

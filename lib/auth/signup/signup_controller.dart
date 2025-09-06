@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 
+import '../../ui/service/Api.dart';
+import '../login/login_page.dart';
+
 class SignupController extends GetxController {
   // State variables
   var isPasswordVisible = false.obs;
@@ -7,7 +10,7 @@ class SignupController extends GetxController {
 
   // Form fields
   var fullName = ''.obs;
-  var email = ''.obs;
+  var Phone = ''.obs;
   var password = ''.obs;
   var confirmPassword = ''.obs;
   var referralCode = ''.obs;
@@ -23,9 +26,10 @@ class SignupController extends GetxController {
   }
 
   // Sign-up logic
-  void signup() {
-    if (fullName.isEmpty || email.isEmpty || password.isEmpty) {
-      Get.snackbar("Error", "Please fill in all required fields");
+  // ✅ Use service here instead of http.post
+  Future<void> signup() async {
+    if (fullName.value.isEmpty || Phone.value.isEmpty || password.value.isEmpty) {
+      Get.snackbar("Error", "Please fill all required fields");
       return;
     }
 
@@ -34,7 +38,28 @@ class SignupController extends GetxController {
       return;
     }
 
-    // Here you can add API call logic
-    Get.snackbar("Success", "Account created successfully!");
+    try {
+      final result = await Api().userReg(
+        name: fullName.value,
+        phone: Phone.value,
+        password: password.value,
+        refer: referralCode.value.isNotEmpty ? referralCode.value : null,
+      );
+
+      // 👇 Print results
+      print("📦 API Response Map: $result");
+      print("➡ Status: ${result['status']}");
+      print("➡ Message: ${result['message']}");
+
+      if (result["status"] == "success") {
+        Get.snackbar("Success", result["message"] ?? "Signup successful");
+        // Navigate if needed
+        Get.offAll(LoginPage());
+      } else {
+        Get.snackbar("Error", result["message"] ?? "Signup failed");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Something went wrong: $e");
+    }
   }
 }

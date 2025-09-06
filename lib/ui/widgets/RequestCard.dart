@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RequestCard extends StatelessWidget {
   final String title;
@@ -21,52 +22,70 @@ class RequestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 10.w), // smaller
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+      elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.w), // reduced padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Requested Title", style: TextStyle(color: Colors.grey)),
-            Text(title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            SizedBox(height: 4),
-            Text(name),
-            Text(disease),
-            SizedBox(height: 6),
+            Text(
+              "Requested Title",
+              style: TextStyle(color: Colors.grey, fontSize: 11.sp),
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13.sp, // reduced
+              ),
+            ),
+            SizedBox(height: 4.h),
+            Text(name, style: TextStyle(fontSize: 11.sp)),
+            Text(
+              disease,
+              style: TextStyle(fontSize: 11.sp, color: Colors.black87),
+            ),
+            SizedBox(height: 8.h),
 
-            // 🔹 Added Blood Group Row
+            // 🔹 Blood Group + Button in One Row
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   bloodGroup,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 15.sp, // reduced from 18
                     fontWeight: FontWeight.bold,
-                    color: Colors.red,
+                    color: Colors.red[900],
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                    status == "Success" ? Colors.green : Colors.grey[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w, // smaller padding
+                      vertical: 6.h,
+                    ),
+                  ),
+                  onPressed: onDetailsPressed,
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: status == "Success"
+                          ? Colors.white
+                          : Colors.black87,
+                    ),
                   ),
                 ),
               ],
             ),
-
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: status == "Success"
-                      ? Colors.green
-                      : Colors.grey.shade300,
-                ),
-                onPressed: onDetailsPressed,
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: status == "Success" ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-            )
           ],
         ),
       ),

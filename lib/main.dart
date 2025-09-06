@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:shebokhealthcare/auth/kyc/KycVerificationPage.dart';
 import 'package:shebokhealthcare/auth/login/login_page.dart';
 import 'package:shebokhealthcare/auth/profile/profile_create_page.dart';
 import 'package:shebokhealthcare/auth/signup/SignupPage.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/home', page: () => HomeScreen()),
         GetPage(name: '/profile', page: () => ProfileCreatePage()),
         GetPage(name: '/main', page: () => MainScreen()), // 🔹 New parent page
+        GetPage(name: '/kyc', page: () => KycVerificationPage()), // 🔹 New parent page
       ],
     );
   }
