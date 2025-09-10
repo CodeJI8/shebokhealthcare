@@ -19,7 +19,7 @@ class ForeignTreatmentScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        const EdgeInsets.symmetric(horizontal: 12, vertical: 9), // ↓ reduced
       ),
     );
   }
@@ -42,37 +42,33 @@ class ForeignTreatmentScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(30), // ↓ reduced
         child: Column(
           children: [
-            _inputField("Enter Full Name", controller.fullName),
-            const SizedBox(height: 12),
-            _inputField("Gender", controller.gender),
-            const SizedBox(height: 12),
-            _inputField("Address", controller.address),
-            const SizedBox(height: 12),
-            _inputField("Disease", controller.disease),
-            const SizedBox(height: 12),
-            _inputField("Duration Of Disease", controller.duration),
-            const SizedBox(height: 12),
             _inputField("Email", controller.email),
-            const SizedBox(height: 12),
-            _inputField("Consultancy Name", controller.consultancy),
-            const SizedBox(height: 12),
-            _inputField("Description", controller.description, maxLines: 4),
+            const SizedBox(height: 10), // ↓ reduced
+            _inputField("Disease", controller.disease),
+            const SizedBox(height: 10),
+            _inputField("Duration (in months)", controller.duration),
+            const SizedBox(height: 10),
+            _inputField("Description (optional)", controller.description,
+                maxLines: 3),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16), // ↓ reduced
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red[900],
-                minimumSize: const Size(double.infinity, 45),
+                minimumSize: const Size(double.infinity, 40), // ↓ reduced
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               onPressed: controller.submitForm,
-              child: const Text("Next", style: TextStyle(color: Colors.white)),
+              child: const Text(
+                "Submit",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

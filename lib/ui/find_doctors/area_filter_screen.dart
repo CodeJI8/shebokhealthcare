@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../widgets/bd_divisions.dart';
 import 'AreaFilterController.dart';
 import 'area_filter_card.dart';
 
+class AreaFilterScreen extends StatefulWidget {
+  const AreaFilterScreen({super.key});
 
-class AreaFilterScreen extends StatelessWidget {
+  @override
+  State<AreaFilterScreen> createState() => _AreaFilterScreenState();
+}
+
+class _AreaFilterScreenState extends State<AreaFilterScreen> {
   final AreaFilterController controller =
   Get.put(AreaFilterController(), permanent: true);
 
-  AreaFilterScreen({super.key});
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 👇 Listen for scroll to bottom
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        controller.loadMoreDoctors();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,76 +47,133 @@ class AreaFilterScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: Colors.red[900]),
           onPressed: () => Get.back(),
         ),
-        title: const Text("Location"),
+        title: const Text("Find Doctors"),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Icon(Icons.bloodtype, color: Colors.red[900]),
-          ),
-        ],
       ),
       body: Column(
         children: [
-          // Location Search Box
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.location_on_outlined),
-                hintText: "Search location...",
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) => controller.location.value = value,
-            ),
-          ),
-
-          // Results List
-          Expanded(
-            child: Obx(() => ListView.builder(
-              itemCount: controller.results.length,
-              itemBuilder: (context, index) {
-                var item = controller.results[index];
-                return Column(
+          // 🔹 If location denied → show dropdowns
+          Obx(() {
+            if (!controller.isLocationAllowed.value) {
+              return Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
                   children: [
-                    AreaFilterCard(
-                      name: item["name"] as String? ?? "",
-                      specialty: item["specialty"] as String? ?? "",
-                      hospital: item["hospital"] as String? ?? "",
-                      rating: item["rating"] as int? ?? 0,
-                      image: item["image"] as String? ?? "",
+                    // Division Dropdown
+                    DropdownButtonFormField<String>(
+                      value: controller.selectedDivision.value.isEmpty
+                          ? null
+                          : controller.selectedDivision.value,
+                      decoration: InputDecoration(
+                        labelText: "Select Division",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      items: bdDivisions.keys
+                          .map((div) => DropdownMenuItem(
+                        value: div,
+                        child: Text(div),
+                      ))
+                          .toList(),
+                      onChanged: (val) {
+                        controller.selectedDivision.value = val ?? '';
+                        controller.selectedDistrict.value = '';
+                      },
                     ),
+                    const SizedBox(height: 12),
 
+                    // District Dropdown (dependent on Division)
+                    Obx(() {
+                      final division = controller.selectedDivision.value;
+                      final districts = division.isNotEmpty
+                          ? bdDivisions[division]!
+                          : <String>[];
 
-                    // Call Now Button
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 70, right: 12, bottom: 12),
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          minimumSize: const Size(double.infinity, 40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                      return DropdownButtonFormField<String>(
+                        value: controller.selectedDistrict.value.isEmpty
+                            ? null
+                            : controller.selectedDistrict.value,
+                        decoration: InputDecoration(
+                          labelText: "Select District",
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
                           ),
                         ),
-                        onPressed: () {},
-                        icon: const Icon(Icons.call, color: Colors.white),
-                        label: const Text("Call Now",
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                    )
+                        items: districts
+                            .map((d) => DropdownMenuItem(
+                          value: d,
+                          child: Text(d),
+                        ))
+                            .toList(),
+                        onChanged: (val) {
+                          controller.selectedDistrict.value = val ?? '';
+                          if (val != null) {
+                            controller.location.value = val;
+                            controller.fetchDoctors(page: 1, isLoadMore: false);
+                          }
+                        },
+                      );
+                    }),
                   ],
-                );
-              },
-            )),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
+
+          // 🔹 Results List
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value && controller.results.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (controller.results.isEmpty) {
+                return const Center(child: Text("No doctors found"));
+              }
+
+              return ListView.builder(
+                controller: _scrollController, // 👈 attach controller
+                itemCount: controller.results.length + 1, // +1 for loader
+                itemBuilder: (context, index) {
+                  if (index < controller.results.length) {
+                    var item = controller.results[index];
+                    return AreaFilterCard(
+                      name: item["name"] ?? "Unknown",
+                      phone: item["phone"] ?? "N/A",
+                      address: item["address"] ?? "",
+                      image: item["img_path"],
+                      distanceKm: item["distance_km"] != null
+                          ? double.tryParse(item["distance_km"].toString())
+                          : null,
+                    );
+                  } else {
+                    // bottom loader
+                    if (controller.isLoading.value) {
+                      return const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    } else if (controller.currentPage.value >=
+                        controller.totalPages.value) {
+                      return const Padding(
+                        padding: EdgeInsets.all(12),
+                        child: Center(child: Text("✅ No more results")),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }
+                },
+              );
+            }),
           ),
         ],
       ),

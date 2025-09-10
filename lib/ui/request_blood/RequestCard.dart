@@ -64,7 +64,7 @@ class RequestCard extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                    status == "Success" ? Colors.green : Colors.grey[300],
+                    status == "Success" ? Colors.green : Colors.green[900],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.r),
                     ),
@@ -80,7 +80,8 @@ class RequestCard extends StatelessWidget {
                       fontSize: 11.sp,
                       color: status == "Success"
                           ? Colors.white
-                          : Colors.black87,
+                          : Colors.white,
+                      fontWeight: FontWeight.bold
                     ),
                   ),
                 ),

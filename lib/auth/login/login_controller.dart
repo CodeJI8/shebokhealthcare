@@ -30,17 +30,23 @@ class LoginController extends GetxController {
     password.value = prefs.getString("password") ?? "";
     isrememberme.value = prefs.getBool("rememberMe") ?? false;
 
-    // 👇 Pre-fill input fields
-    phoneController.text = phone.value;
-    passwordController.text = password.value;
+    if (isrememberme.value) {
+      phoneController.text = phone.value;
+      passwordController.text = password.value;
+    }
 
-    // 👇 Auto-login if Remember Me was checked and token exists
     final token = prefs.getString("token");
-    if (isrememberme.value && token != null && token.isNotEmpty) {
-      // ✅ Navigate directly to Home
-      Get.offAll(HomeScreen());
+    print("🔑 Saved Token: $token");
+
+    if (token != null && token.isNotEmpty) {
+      // 👇 Delay navigation so widget tree is ready
+      Future.delayed(Duration(milliseconds: 500), () {
+        Get.offAll(() => HomeScreen());
+      });
     }
   }
+
+
 
 
   void toggleRememberMe(bool? value) {

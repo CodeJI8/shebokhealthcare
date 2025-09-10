@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/RequestCard.dart';
+import '../request_blood/RequestCard.dart';
 import 'requested_post_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 

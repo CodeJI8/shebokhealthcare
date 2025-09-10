@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
-import '../../api.dart'; // adjust path if needed
+
+import '../../ui/service/Api.dart';
+
 
 class ProfileCreateController extends GetxController {
   // Profile fields

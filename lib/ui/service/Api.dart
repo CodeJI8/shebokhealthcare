@@ -180,6 +180,7 @@ class Api {
     );
 
     print("📡 Get Blood Requests Response: ${response.body}");
+    print("📡 token: ${token}");
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -188,6 +189,82 @@ class Api {
     }
   }
 
+
+
+
+
+  // 👉 Foreign Treatment Registration
+  Future<Map<String, dynamic>> foreignTreatment({
+    required String email,
+    required String disease,
+    required int duration, // in months
+    String? description,
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl/foreign_treatment.php');
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        "email": email,
+        "disease": disease,
+        "duration": duration,
+        if (description != null) "description": description,
+      }),
+    );
+
+    print("📜 Raw Foreign Treatment Response: ${response.body}");
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to register foreign treatment. Code: ${response.statusCode}");
+    }
+  }
+
+
+// 👉 Find Doctors
+  Future<Map<String, dynamic>> findDoctors({
+    String? district,
+    double? latitude,
+    double? longitude,
+    int page = 1,
+    int limit = 10,
+    required String token, required long, required lat,
+  }) async {
+    final queryParams = {
+      "page": page.toString(),
+      "limit": limit.toString(),
+      if (district != null && district.isNotEmpty) "district": district,
+      if (latitude != null) "latitude": latitude.toString(),
+      if (longitude != null) "longitude": longitude.toString(),
+    };
+
+    final uri = Uri.https(
+      "api.shebokhealthcare.com",
+      "/find_doctors.php",
+      queryParams,
+    );
+
+    final response = await http.get(
+      uri,
+      headers: {
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    print("📡 Find Doctors Response: ${response.body}");
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to fetch doctors. Code: ${response.statusCode}");
+    }
+  }
 
 
 

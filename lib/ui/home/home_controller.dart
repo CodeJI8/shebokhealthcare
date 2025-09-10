@@ -1,10 +1,6 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../service/Api.dart';
-
-
-
 
 class HomeController extends GetxController {
   final Api api = Api();

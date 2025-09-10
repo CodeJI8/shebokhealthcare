@@ -13,7 +13,7 @@ import '../foreign/foreign_treatment_screen.dart';
 import '../post/requested_post_details.dart';
 import '../request_blood/BloodRequestScreen.dart';
 import '../widgets/BloodChip.dart';
-import '../widgets/RequestCard.dart';
+import '../request_blood/RequestCard.dart';
 import '../widgets/showReferralCodePopup.dart';
 import 'home_controller.dart';
 
@@ -273,18 +273,20 @@ class HomeScreen extends StatelessWidget {
                     children: controller.requests
                         .map(
                           (req) => RequestCard(
-                        title: req["title"] ?? "Untitled",
-                        name: req["name"] ?? "Unknown",
-                        disease: req["disease"] ?? "Not specified",
-                        bloodGroup: req["bloodGroup"] ?? "-",
-                        status: req["status"] ?? "Pending",
-                        onDetailsPressed: () {
-                          Get.to(() => RequestedPostDetails());
-                        },
-                      ),
+                            title: req["title"] ?? "Untitled",
+                            name: req["pat_name"] ?? "Unknown",        // 👈 match API key
+                            disease: req["disease"] ?? "Not specified",
+                            bloodGroup: req["blood_group"] ?? "-",     // 👈 match API key
+                            status: req["status"] ?? "Details",
+                            onDetailsPressed: () {
+                              Get.to(() => RequestedPostDetails());
+                            },
+                          )
+
                     )
                         .toList(),
                   );
+
                 }),
 
                 SizedBox(height: 60.h * 1.1), // nav bar space +10%
