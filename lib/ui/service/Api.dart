@@ -266,6 +266,44 @@ class Api {
     }
   }
 
+// 👉 Join Thalassemia Club
+  Future<Map<String, dynamic>> joinThalassemiaClub({
+    String? bloodReportPath,     // optional CBC report image
+    String? prescriptionPath,    // optional prescription image
+    required int showNumber,     // 0 or 1
+    required String bloodGroup,  // e.g. O+
+    required String token,
+  }) async {
+    final url = Uri.parse('$baseUrl/join_thalasamia.php');
+
+    // Using multipart request for file upload
+    var request = http.MultipartRequest("POST", url);
+    request.headers["Authorization"] = "Bearer $token";
+
+    // Add fields
+    request.fields["show_number"] = showNumber.toString();
+    request.fields["blood_group"] = bloodGroup;
+
+    // Add optional files
+    if (bloodReportPath != null) {
+      request.files.add(await http.MultipartFile.fromPath("blood_report_path", bloodReportPath));
+    }
+    if (prescriptionPath != null) {
+      request.files.add(await http.MultipartFile.fromPath("prescription_path", prescriptionPath));
+    }
+
+    // Send request
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    print("📜 Raw Join Thalassemia Club Response: ${response.body}");
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Failed to join thalassemia club. Code: ${response.statusCode}");
+    }
+  }
 
 
 

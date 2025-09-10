@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'thalassemia_register_controller.dart';
 
-
 class ThalassemiaRegisterScreen extends StatelessWidget {
   final ThalassemiaRegisterController controller =
   Get.put(ThalassemiaRegisterController());
@@ -39,6 +38,17 @@ class ThalassemiaRegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloodGroups = [
+      "A+",
+      "A-",
+      "B+",
+      "B-",
+      "O+",
+      "O-",
+      "AB+",
+      "AB-",
+    ];
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -68,6 +78,25 @@ class ThalassemiaRegisterScreen extends StatelessWidget {
 
             SizedBox(height: 20),
 
+            /// Blood Group Dropdown
+            Obx(() => DropdownButtonFormField<String>(
+              value: controller.selectedBloodGroup.value.isEmpty
+                  ? null
+                  : controller.selectedBloodGroup.value,
+              items: bloodGroups
+                  .map((bg) =>
+                  DropdownMenuItem(value: bg, child: Text(bg)))
+                  .toList(),
+              onChanged: (val) =>
+              controller.selectedBloodGroup.value = val ?? "",
+              decoration: InputDecoration(
+                labelText: "Select Blood Group",
+                border: OutlineInputBorder(),
+              ),
+            )),
+
+            SizedBox(height: 20),
+
             /// Show number checkbox
             Obx(() => CheckboxListTile(
               value: controller.showNumber.value,
@@ -81,8 +110,9 @@ class ThalassemiaRegisterScreen extends StatelessWidget {
 
             /// Next Button
             Obx(() => ElevatedButton(
-              onPressed:
-              controller.canProceed ? controller.submit : null,
+              onPressed: controller.canProceed
+                  ? controller.submit
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: controller.canProceed
                     ? Colors.red[900]
@@ -92,9 +122,13 @@ class ThalassemiaRegisterScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-              child: Text(
+              child: controller.isLoading.value
+                  ? CircularProgressIndicator(
+                  color: Colors.white, strokeWidth: 2)
+                  : Text(
                 "Next",
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style:
+                TextStyle(color: Colors.white, fontSize: 16),
               ),
             )),
           ],
