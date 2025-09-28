@@ -16,16 +16,33 @@ class BloodRequestScreen extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       builder: (context, child) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red[900],
-          title: const Text("Post Blood Request", style:  TextStyle(color: Colors.white),),
-        ),
+
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(16.w * 0.9), // −10%
             child: Column(
               children: [
-                // 🔹 Title
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                      color: Colors.red[900], // Red background
+                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white), // White icon
+                      onPressed: () => Get.back(),
+                      padding: EdgeInsets.zero,
+                      iconSize: 18,// Remove default padding for perfect centering
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 12.h ),
+
+
                 TextField(
                   onChanged: (v) => controller.requestTitleController.text = v,
                   decoration: _inputDecoration("Post Title"),
@@ -210,19 +227,25 @@ class BloodRequestScreen extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red[900],
-                    minimumSize: Size(double.infinity, 48.h * 0.9),
+                    minimumSize: Size(83, 29), // Set the width and height to 83 and 29
+                    padding: EdgeInsets.zero, // Remove default padding to fit the exact size
                   ),
                   child: controller.isLoading.value
                       ? SizedBox(
                     width: 20.w * 0.9,
                     height: 20.w * 0.9,
                     child: const CircularProgressIndicator(
-                        color: Colors.white, strokeWidth: 2),
+                        color: Colors.white,
+                        strokeWidth: 2
+                    ),
                   )
-                      : Text("Submit Request",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: 14.sp * 0.9)),
+                      : Text(
+                    "Next",
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 14.sp ),
+                  ),
                 )),
+
               ],
             ),
           ),

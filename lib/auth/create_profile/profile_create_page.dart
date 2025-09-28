@@ -80,7 +80,7 @@ class ProfileCreatePage extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red[900],
                                 minimumSize:
-                                Size(double.infinity, 44.h * 0.9), // −10%
+                                Size(124.w, 29.h), // −10%
                               ),
                               child: Text(
                                 "Create a profile",
@@ -269,7 +269,7 @@ class ProfileCreatePage extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red[900],
-                                minimumSize: Size(double.infinity, 48.h * 0.9),
+                                minimumSize: Size(83.w , 29.h),
                               ),
                               child: controller.isLoading.value
                                   ? SizedBox(

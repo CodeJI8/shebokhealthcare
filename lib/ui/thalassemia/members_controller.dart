@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shebokhealthcare/ui/service/Api.dart';
 import 'package:shebokhealthcare/ui/thalassemia/register/thalassemia_register_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class Member {
   final String name;
@@ -13,68 +17,94 @@ class Member {
     required this.bloodGroup,
     required this.imageUrl,
   });
+
+  factory Member.fromJson(Map<String, dynamic> json) {
+    return Member(
+      name: json["name"] ?? "Unknown",
+      phone: json["phone"] ?? "N/A",
+      bloodGroup: json["blood_group"] ?? "N/A",
+      imageUrl: json["image"] ?? "https://via.placeholder.com/150",
+    );
+  }
 }
 
 class MembersController extends GetxController {
-  // Sample members data
+  final Api api = Api();
 
+  var members = <Member>[].obs;
+  var isLoading = false.obs;
+  var page = 1.obs;
+  var hasMore = true.obs;
 
-  var members = <Member>[
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/men/1.jpg",
-    ),
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/men/2.jpg",
-    ),
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/women/3.jpg",
-    ),
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/men/4.jpg",
-    ),
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/men/5.jpg",
-    ),
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/men/6.jpg",
-    ),
-    Member(
-      name: "Arthur",
-      phone: "016 4749 74383",
-      bloodGroup: "O+",
-      imageUrl: "https://randomuser.me/api/portraits/men/7.jpg",
-    ),
-  ].obs;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchMembers(); // load first page automatically
+  }
 
-  void callMember(String phone) {
-    // TODO: integrate with url_launcher to actually make phone calls
-    print("Calling $phone...");
+  Future<void> fetchMembers({bool loadMore = false}) async {
+    if (isLoading.value) return;
+    if (loadMore && !hasMore.value) return;
+
+    try {
+      isLoading.value = true;
+
+      if (!loadMore) {
+        page.value = 1;
+        members.clear();
+        hasMore.value = true;
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      if (token == null) {
+        Get.snackbar("Error", "You must login first");
+        return;
+      }
+
+      final response = await api.getThalassemiaPatients(
+        page: page.value,
+        limit: 10,
+        token: token,
+      );
+
+      if (response["status"] == "success") {
+        List data = response["data"] ?? [];
+
+        final newMembers = data.map((m) => Member.fromJson(m)).toList().cast<Member>();
+
+        if (newMembers.isEmpty) {
+          hasMore.value = false;
+        } else {
+          members.addAll(newMembers);
+          page.value++;
+        }
+      } else {
+        Get.snackbar("Error", response["message"] ?? "Failed to load members");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Open the phone dialer
+  void callMember(String phone) async {
+    final Uri _phoneUri = Uri(scheme: 'tel', path: phone);
+    if (await canLaunch(_phoneUri.toString())) {
+      await launch(_phoneUri.toString());
+    } else {
+      Get.snackbar("Error", "Unable to make a call.");
+    }
   }
 
   void joinNow() {
-    Get.to(() => ThalassemiaRegisterScreen()); // 🚀 navigate
+    Get.to(() => ThalassemiaRegisterScreen());
   }
 
   void registerNow() {
-    Get.to(() => ThalassemiaRegisterScreen()); // 🚀 navigate
+    Get.to(() => ThalassemiaRegisterScreen());
   }
-
 }

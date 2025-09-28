@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ for responsiveness
-import 'package:shebokhealthcare/auth/profile/profile_create_page.dart';
 import '../signup/SignupPage.dart';
 import 'login_controller.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../request_blood/RequestCard.dart';
+import '../home/RequestCard.dart';
 import 'requested_post_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,9 +25,8 @@ class RequestedPostDetails extends StatelessWidget {
                   GestureDetector(
                     onTap: () => Get.back(),
                     child: Container(
-                      height: 40,
-
-                      padding: EdgeInsets.all(8),
+                      height: 25,
+                      width: 25,
                       decoration: BoxDecoration(
                         color: Colors.red[900],
                         shape: BoxShape.rectangle,
@@ -43,8 +42,9 @@ class RequestedPostDetails extends StatelessWidget {
                       // Do something here
                     },
                     child: Container(
-                      height: 40,
-                      padding: EdgeInsets.all(8),
+                      height: 25,
+                      width: 25,
+
                       decoration: BoxDecoration(
                         color: Colors.red[900],
                         shape: BoxShape.rectangle,
@@ -88,7 +88,7 @@ class RequestedPostDetails extends StatelessWidget {
                       onPressed: () =>
                           _launchDialer(controller.contactNumber.value),
                       icon: Icon(Icons.phone, color: Colors.white),
-                      label: Text("Call Now"),
+                      label: Text("Call Now", style: TextStyle(color: Colors.white),),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         shape: RoundedRectangleBorder(

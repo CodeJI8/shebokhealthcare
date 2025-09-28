@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../service/Api.dart';
 
-class AreaFilterController extends GetxController {
+class FindDoctorController extends GetxController {
   final Api api = Api();
 
   // 🔹 Location / District
@@ -28,6 +29,7 @@ class AreaFilterController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Request location permission every time the page opens
     _checkLocationPermission();
   }
 
@@ -40,6 +42,16 @@ class AreaFilterController extends GetxController {
       await _getCurrentLocation();
     } else {
       isLocationAllowed.value = false;
+      Get.snackbar(
+        "Location Permission Denied",
+        "Please enable location permission in settings to access this feature.",
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 5),
+        mainButton: TextButton(
+          onPressed: () => openAppSettings(),
+          child: const Text("Go to Settings"),
+        ),
+      );
     }
   }
 
@@ -58,6 +70,12 @@ class AreaFilterController extends GetxController {
       fetchDoctors(page: 1, limit: 10, isLoadMore: false);
     } catch (e) {
       print("❌ Location error: $e");
+      Get.snackbar(
+        "Location Error",
+        "Failed to fetch location. Please ensure GPS is enabled.",
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 5),
+      );
     }
   }
 

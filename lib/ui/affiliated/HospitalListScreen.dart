@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'HospitalCard.dart';
 
 class HospitalListScreen extends StatelessWidget {
@@ -35,14 +37,22 @@ class HospitalListScreen extends StatelessWidget {
           children: [
             // 🔹 Top Row: Back + Search
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(15.0),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.red),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                      color: Colors.red[900], // Red background
+                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white), // White icon
+                      onPressed: () => Get.back(),
+                      padding: EdgeInsets.zero,
+                      iconSize: 18,// Remove default padding for perfect centering
+                    ),
                   ),
                   const SizedBox(width: 8),
                   const Expanded(
