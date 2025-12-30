@@ -17,9 +17,10 @@ class HospitalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-
-
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,  // Set border radius to zero
+      ),
       child: ListTile(
         leading: CircleAvatar(
           radius: 24,

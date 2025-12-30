@@ -31,7 +31,6 @@ class HospitalListScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-
       body: SafeArea(
         child: Column(
           children: [
@@ -51,11 +50,13 @@ class HospitalListScreen extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back, color: Colors.white), // White icon
                       onPressed: () => Get.back(),
                       padding: EdgeInsets.zero,
-                      iconSize: 18,// Remove default padding for perfect centering
+                      iconSize: 18, // Remove default padding for perfect centering
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Expanded(
+                  Container(
+                    height: 25, // Match the button's height
+                    width: MediaQuery.of(context).size.width - 70, // Take up the remaining space
                     child: TextField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: Colors.grey),

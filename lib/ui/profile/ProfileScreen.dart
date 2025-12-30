@@ -6,7 +6,6 @@ import '../home/home.dart';
 import '../widgets/BottomNav.dart';
 import 'ProfileController.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -50,8 +49,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,10 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: const Icon(Icons.arrow_back, color: Colors.white), // White icon
                         onPressed: () => Get.back(),
                         padding: EdgeInsets.zero,
-                        iconSize: 18,// Remove default padding for perfect centering
+                        iconSize: 18, // Remove default padding for perfect centering
                       ),
                     ),
-
 
                     // KYC Status
                     Obx(() => GestureDetector(
@@ -88,7 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         height: 29,
                         width: 127,
-
                         decoration: BoxDecoration(
                           color: controller.kycStatus.value == "approved"
                               ? Colors.green
@@ -172,21 +167,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildInfoCard(controller),
               const SizedBox(height: 30),
 
-              // Logout Button
-              ElevatedButton.icon(
-                onPressed: controller.logout,
-                icon: const Icon(Icons.logout, color: Colors.white),
-                label: const Text("Log Out",
-                    style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
+
+
             ],
           ),
         ),
@@ -205,7 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Get.to(() => HomeScreen());
               break;
             case 1:
-
               break;
           }
         },
@@ -220,7 +201,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Obx(() => _buildInfoRow(Icons.phone, controller.phone.value)),
           Obx(() => _buildInfoRow(Icons.code, controller.referCode.value)),
+          GestureDetector(
+            onTap: controller.logout,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Align(
+                alignment: Alignment.centerLeft,  // Align image to the left
+                child: Image.asset(
+                  'assets/logout.png', // Replace with your logout image asset
+                  width: 106,  // Set the size as needed
+                  height: 44,  // Set the size as needed
+                ),
+              ),
+            ),
+          ),
         ],
+
       ),
     );
   }

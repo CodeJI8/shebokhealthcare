@@ -10,7 +10,6 @@ class FindDoctorScreen extends StatefulWidget {
   @override
   State<FindDoctorScreen> createState() => _FindDoctorScreenState();
 }
-
 class _FindDoctorScreenState extends State<FindDoctorScreen> {
   final FindDoctorController controller = Get.put(FindDoctorController(), permanent: true);
   final ScrollController _scrollController = ScrollController();
@@ -63,77 +62,74 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
 
               SizedBox(height: 10,),
 
-              Obx(() {
-                if (!controller.isLocationAllowed.value) {
-                  return Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      children: [
-                        DropdownButtonFormField<String>(
-                          value: controller.selectedDivision.value.isEmpty
-                              ? null
-                              : controller.selectedDivision.value,
-                          decoration: InputDecoration(
-                            labelText: "Select Division",
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          items: bdDivisions.keys
-                              .map((div) => DropdownMenuItem(
-                            value: div,
-                            child: Text(div),
-                          ))
-                              .toList(),
-                          onChanged: (val) {
-                            controller.selectedDivision.value = val ?? '';
-                            controller.selectedDistrict.value = '';
-                          },
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      value: controller.selectedDivision.value.isEmpty
+                          ? null
+                          : controller.selectedDivision.value,
+                      decoration: InputDecoration(
+                        labelText: "Select Division",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
                         ),
-                        const SizedBox(height: 12),
-                        Obx(() {
-                          final division = controller.selectedDivision.value;
-                          final districts = division.isNotEmpty
-                              ? bdDivisions[division]!
-                              : <String>[];
-
-                          return DropdownButtonFormField<String>(
-                            value: controller.selectedDistrict.value.isEmpty
-                                ? null
-                                : controller.selectedDistrict.value,
-                            decoration: InputDecoration(
-                              labelText: "Select District",
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                            items: districts
-                                .map((d) => DropdownMenuItem(
-                              value: d,
-                              child: Text(d),
-                            ))
-                                .toList(),
-                            onChanged: (val) {
-                              controller.selectedDistrict.value = val ?? '';
-                              if (val != null) {
-                                controller.location.value = val;
-                                controller.fetchDoctors(page: 1, isLoadMore: false);
-                              }
-                            },
-                          );
-                        }),
-                      ],
+                      ),
+                      items: bdDivisions.keys
+                          .map((div) => DropdownMenuItem(
+                        value: div,
+                        child: Text(div),
+                      ))
+                          .toList(),
+                      onChanged: (val) {
+                        controller.selectedDivision.value = val ?? '';
+                        controller.selectedDistrict.value = '';
+                      },
                     ),
-                  );
-                }
-                return const SizedBox.shrink();
-              }),
+                    const SizedBox(height: 12),
+                    Obx(() {
+                      final division = controller.selectedDivision.value;
+                      final districts = division.isNotEmpty
+                          ? bdDivisions[division]!
+                          : <String>[];
+
+                      return DropdownButtonFormField<String>(
+                        value: controller.selectedDistrict.value.isEmpty
+                            ? null
+                            : controller.selectedDistrict.value,
+                        decoration: InputDecoration(
+                          labelText: "Select District",
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        items: districts
+                            .map((d) => DropdownMenuItem(
+                          value: d,
+                          child: Text(d),
+                        ))
+                            .toList(),
+                        onChanged: (val) {
+                          controller.selectedDistrict.value = val ?? '';
+                          if (val != null) {
+                            controller.location.value = val;
+                            // Call the API when district is selected
+                            controller.fetchDoctors(page: 1, isLoadMore: false);
+                          }
+                        },
+                      );
+                    }),
+                  ],
+                ),
+              ),
+
               Expanded(
                 child: Obx(() {
                   if (controller.isLoading.value && controller.results.isEmpty) {
@@ -186,5 +182,6 @@ class _FindDoctorScreenState extends State<FindDoctorScreen> {
     );
   }
 }
+
 
 

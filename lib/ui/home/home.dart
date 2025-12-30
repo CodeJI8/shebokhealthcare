@@ -40,25 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       builder: (context, child) => Scaffold(
         backgroundColor: Colors.white,
-        extendBody: true,
 
         body: Scaffold(
-          resizeToAvoidBottomInset: true, // Automatically resizes when the floating button appears
+
+
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          extendBody: true,
+          extendBody: false,
           body:
             SafeArea(
               child: SingleChildScrollView(
-                controller: _scrollController, // Assign scroll controller
-                padding: EdgeInsets.all(12.w * 1.1), // Adjust padding
+                controller: _scrollController,
+                padding: EdgeInsets.fromLTRB(12.w * 1.1, 12.w * 1.1, 12.w * 1.1, 100.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -176,28 +175,37 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       }
-                      return CarouselSlider(
-                        options: CarouselOptions(
-                          height: 149,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 3),
-                          autoPlayAnimationDuration: Duration(milliseconds: 800),
-                          autoPlayCurve: Curves.easeInOut,
-                          enlargeCenterPage: true,
-                          viewportFraction: 0.9,
-                        ),
-                        items: controller.sliders.map((slider) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              slider["image_url"],
-                              fit: BoxFit.cover,
+                      return Container(
+                        width: 500, // Set the width to 350
+                        height: 170, // Set the height to 150
+                        child: CarouselSlider(
+                          options: CarouselOptions(
 
-                            ),
-                          );
-                        }).toList(),
+                            autoPlay: true,
+                            autoPlayInterval: Duration(seconds: 3),
+                            autoPlayAnimationDuration: Duration(milliseconds: 800),
+                            autoPlayCurve: Curves.easeInOut,
+                            enlargeCenterPage: true,
+                            viewportFraction: 0.9,
+                          ),
+                          items: controller.sliders.map((slider) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                width: 350,  // Set width to 350
+                                height: 150, // Set height to 150
+                                child: Image.network(
+                                  slider["image_url"],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+
+                          }).toList(),
+                        ),
                       );
                     }),
+
 
                     SizedBox(height: 4.h * 1.1),
                     Center(
@@ -428,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 7.0),  // Adjust the value as needed
+                        padding: EdgeInsets.only(left: 7.0),
                         child: Text(
                           "Blood Needed",
                           style: TextStyle(
@@ -443,11 +451,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 8.h),
                     Obx(() {
                       return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribute items evenly
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: List.generate(controller.bloodTypes.length, (index) {
                           return Expanded(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 2.w), // Adjust horizontal spacing as needed
+                              padding: EdgeInsets.symmetric(horizontal: 2.w),
                               child: BloodChip(
                                 type: controller.bloodTypes[index],
                                 isSelected: controller.selectedBloodType.value == controller.bloodTypes[index],
@@ -560,8 +568,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
         ),
+
 
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // Center the floating action button
         floatingActionButton: BottomNav(

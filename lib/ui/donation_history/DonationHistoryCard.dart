@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'DonationHistory.dart';
 
@@ -17,7 +18,7 @@ class DonationHistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       child: ListTile(
         contentPadding: const EdgeInsets.all(12),
         title: Text(
@@ -34,10 +35,11 @@ class DonationHistoryCard extends StatelessWidget {
         trailing: ElevatedButton(
           onPressed: onRemove,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red[100],
+            backgroundColor: Colors.red[900],
             foregroundColor: Colors.red[900],
+            minimumSize: const Size (70, 20)
           ),
-          child: const Text("Remove"),
+          child: const Text("Remove", style:  TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Colors.white),),
         ),
       ),
     );
